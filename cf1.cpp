@@ -3,80 +3,102 @@
 #include <bits/stdc++.h>
 #include <math.h>
 #include <stack>
-#define pb push_back
-#define pop pop_back
-#define ll long long int
-#define vi vector<int>
-#define vl vector<long>
-#define vvi vector<vector<int>>
-#define vvl vector<vector<long>>
-#define rep(i, n) for (ll i = 0; i < n; i++)
-#define rep2(i, a, b) for (ll i = a; i <= b; i++)
-#define repr(i, a, b) for (ll i = a; i >= b; i--)
-#define I long_max
-#define pii pair<int, int>
-#define pll pair<long, long>
-#define vpair vector<pair<int, int>>
-#define mp make_pair
-#define all(v) v.begin(), v.end()
-#define rall(v) v.rbegin(), v.rend()
-#define fir first
-#define sec second
-#define d (int)1e9 + 7
-#define INF (int)2e9 + 1
-#define el "\n"
-#define fs fastscan
-
-#define vrep(vec) for (const auto &value : vec)
-#define arep(arrat) for (const auto &value : array)
 using namespace std;
 
-bool sortinrev(const pair<int, int> &a,
-               const pair<int, int> &b)
+int rsum(int a[], int n)
 {
-    return (a.first > b.first);
-}
-void swap(int *a, int *b)
-{
-    int temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-ll solve(){
-    int n;
-    vector<int> a(n);
-    rep(i,n){
-        cin>>a[i];
+    int sm;
+    int rsum1 = 0;
+    for (sm = 0; sm < n; sm++)
+    {
+        rsum1 = rsum1 + a[sm];
     }
-    ll last1 = 0, last2 = 0;
-    int flag = 0;
-    sort(a.begin(),a.end());
-    int j = 0;
-    for(int i = 0;i<=a[n-1]+2;i++){
-        if(a[j] == a[j+1] && a[j] == i){
-            j = j+2;
-        }
-        else if(a[j] == i){
-            if(!flag)
-            last1 = i;
-        }
-        else{
-
-        }
-    }
+    return rsum1;
 }
-
 int main()
 {
-    std::ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    //use auto instead of data types
-    int t;
-    cin>>t;
-    while(t--){
-        solve();
+
+    int t, test;
+    cin >> t;
+    for (test = 0; test < t; test++)
+    { // n rows and m columns
+        int m, n, i, j;
+        cin >> n;
+        cin >> m;
+        int row[n];
+        int col[m];
+        int a[n][m];
+        for (i = 0; i < n; i++)
+        {
+            row[i] = 0;
+        }
+        for (i = 0; i < m; i++)
+        {
+            col[i] = 0;
+        }
+        for (i = 0; i < n; i++)
+        {
+            for (j = 0; j < m; j++)
+            {
+                cin >> a[i][j];
+                if (a[i][j] == 1)
+                {
+                    row[i] = 1;
+                    col[j] = 1;
+                }
+            }
+        }
+        int ash = 0;
+        int viv = 1;
+        int control_row = 0;
+        int control_col = 0;
+        while (control_row != -1 && control_col != -1)
+        {
+            control_row = -1;
+            control_col = -1;
+            for (i = 0; i < n; i++)
+            {
+                if (row[i] == 0)
+                {
+                    control_row = i;
+                }
+            }
+            for (i = 0; i < m; i++)
+            {
+                if (col[i] == 0)
+                {
+                    control_col = i;
+                }
+            }
+            if (control_row == -1 || control_col == -1)
+            {
+                if (ash == 1)
+                {
+                    cout << "Ashish" << endl;
+                    break;
+                }
+                else
+                {
+                    cout << "Vivek" << endl;
+                    break;
+                }
+            }
+            a[control_row][control_col] = 1;
+            if (ash == 0)
+            {
+                ash = 1;
+                row[control_row] = 1;
+                col[control_col] = 1;
+                viv = 0;
+            }
+            else
+            {
+                ash = 0;
+                row[control_row] = 1;
+                col[control_col] = 1;
+                viv = 1;
+            }
+        }
     }
     return 0;
 }
