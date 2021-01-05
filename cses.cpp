@@ -147,6 +147,7 @@ void solve()
         cin>>s[i];
     }
     cout<<2;
+    hi maneesh
     return ;
 }
  
