@@ -1,11 +1,11 @@
-#include <iostream>
-#include <iomanip>
 #include <vector>
 #include <bits/stdc++.h>
 #include <math.h>
 #include <stack>
+#include <bitset>
+#include <string>
 #define pb push_back
-// #define pop pop_back
+#define pop pop_back
 #define ll long long int
 #define vi vector<int>
 #define vl vector<long>
@@ -23,105 +23,78 @@
 #define rall(v) v.rbegin(), v.rend()
 #define fir first
 #define sec second
-#define mod (int)1e9 + 7
+#define d (int)1e9 + 7
 #define INF (int)2e9 + 1
 #define el "\n"
 #define fs fastscan
+#define tlower(A) transform(A.begin(), A.end(), A.begin(), ::tolower)
+#define tupper(A) transform(A.begin(), A.end(), A.begin(), ::toupper)
 #define vrep(vec) for (const auto &value : vec)
 #define arep(arrat) for (const auto &value : array)
+#define N 10000
 using namespace std;
 
-bool sortinrev(const pair<int, int> &a,
-               const pair<int, int> &b)
-{
-    return (a.first > b.first);
-}
-void swap(int *a, int *b)
-{
-    int temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;
-}
-ll modu(ll n, ll d)
-{
-    ll qw = n % d;
-    if (qw < 0)
-    {
-        return qw + d;
-    }
-    return qw;
-}
-bool isPrime(int n)
-{
-    // Corner cases
-    if (n <= 1)
-        return false;
-    if (n <= 3)
-        return true;
-
-    // This is checked so that we can skip
-    // middle five numbers in below loop
-    if (n % 2 == 0 || n % 3 == 0)
-        return false;
-
-    for (int i = 5; i * i <= n; i = i + 6)
-        if (n % i == 0 || n % (i + 2) == 0)
-            return false;
-
-    return true;
-}
-
-int solve()
+void solve()
 {
     int n;
     cin >> n;
-    vector<int> a(n);
-    rep(i, n)
+    string v;
+    cin >> v;
+    int j = 0;
+    //    cout<<v[1];
+    while (j < v.size() - 1)
     {
-        cin >> a[i];
+        if (v[j] == '1' && v[j + 1] == '0')
+        {
+            if (j + 2 <= v.size() - 1 && j - 1 >= 0)
+            {
+                if (v[j + 2] == '1' && v[j - 1] == '1')
+                {
+                    v.erase(v.begin() + j);
+                    if (j != 0)
+                        j--;
+                }
+                else if (v[j + 2] == '0')
+                {
+                    v.erase(v.begin() + j + 1);
+                    if (j != 0)
+                        j--;
+                }
+            }
+            else if (j == 0)
+            {
+                if (j + 3 <= v.size() - 1 && v[j + 3] == '0')
+                {
+                    v.erase(v.begin() + j + 1);
+                    if (j != 0)
+                        j--;
+                }
+                else{
+                    v.erase(v.begin() + j);
+                    if (j != 0)
+                        j--;
+                }
+            }
+
+        }
+        j++;
     }
-    sort(a.begin(), a.end());
-    vector<vector<int>> g;
-    vector<int> t1;
-    for (int i = 0; i < n; i++)
+    rep(i, v.size())
     {
-        if (a[i] == a[i + 1])
-        {
-            t1.push_back(a[i]);
-        }
-        else
-        {
-            t1.push_back(a[i]);
-            g.push_back(t1);
-            t1 = {};
-        }
+        cout << v[i];
     }
-    int time = 1;
-    int count = 0;
-    for(int i = 0;i<g.size();i++){
-        time = max(time,g[i][0] - (int(g[i].size()))/2);
-        for(int j = 0;j<g[i].size();j++){
-            count+=abs(g[i][j] - time);
-            time++;
-        }
-    }
-    cout << count << endl;
-    return 0;
+    cout << endl;
 }
 
 int main()
 {
-    std::ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    //use auto instead of data types
     int t;
     cin >> t;
-
+    stack<int> s;
+    s.pu
     while (t--)
     {
         solve();
     }
-
     return 0;
 }

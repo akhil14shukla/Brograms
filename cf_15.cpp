@@ -1,11 +1,11 @@
-#include <iostream>
-#include <iomanip>
 #include <vector>
 #include <bits/stdc++.h>
 #include <math.h>
 #include <stack>
+#include <bitset>
+#include <string>
 #define pb push_back
-// #define pop pop_back
+#define pop pop_back
 #define ll long long int
 #define vi vector<int>
 #define vl vector<long>
@@ -23,108 +23,99 @@
 #define rall(v) v.rbegin(), v.rend()
 #define fir first
 #define sec second
-#define mod (int)(1e9 + 7)
+#define d (int)1e9 + 7
 #define INF (int)2e9 + 1
 #define el "\n"
 #define fs fastscan
+#define tlower(A) transform(A.begin(), A.end(), A.begin(), ::tolower)
+#define tupper(A) transform(A.begin(), A.end(), A.begin(), ::toupper)
 #define vrep(vec) for (const auto &value : vec)
 #define arep(arrat) for (const auto &value : array)
+#define N 10000
 using namespace std;
-
 bool sortinrev(const pair<int, int> &a,
                const pair<int, int> &b)
 {
-    return (a.first > b.first);
+    if (a.first != b.first)
+        return (a.first > b.first);
+    else
+        return (a.second > b.second);
 }
-void swap(int *a, int *b)
-{
-    int temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;
-}
-ll modu(ll n, ll d)
-{
-    ll qw = n % d;
-    if (qw < 0)
-    {
-        return qw + d;
-    }
-    return qw;
-}
-bool isPrime(int n)
-{
-    // Corner cases
-    if (n <= 1)
-        return false;
-    if (n <= 3)
-        return true;
-
-    // This is checked so that we can skip
-    // middle five numbers in below loop
-    if (n % 2 == 0 || n % 3 == 0)
-        return false;
-
-    for (int i = 5; i * i <= n; i = i + 6)
-        if (n % i == 0 || n % (i + 2) == 0)
-            return false;
-
-    return true;
-}
-
-int solve()
-{
-    ll n;
-    cin >> n;
-    ll last;
-    ll min1 = mod;
-    ll max1 = 0;
-    ll min2 = mod;
-    ll max2 = 0;
-    ll count = 0;
-    rep(i, n)
-    {
-        ll temp;
-        cin >> temp;
-        if (i == 0)
-        {
-            last = temp;
-            min1 = max1 = temp;
-            continue;
-        }
-        if (last == temp || i == n-1)
-        {
-            count++;
-            last = temp;
-            min2 = mod;
-            max2 = 0;
-        }
-        min1 = min(temp, last);
-        max1 = max(temp, last);
-        if (max2 < min1 || min2 > max1)
-        {
-            min2 = min(min2, temp);
-            max2 = max(max2, temp);
-            continue;
-        }
-    }
-    cout << count << endl;
-
-    return 0;
-}
-
 int main()
 {
     std::ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //use auto instead of data types
-    // int t;
-    // cin >> t;
-
-    // while (t--)
+    int test;
+    cin >> test;
+    while (test--)
     {
-        solve();
-    }
+        string s1;
+        cin >> s1;
+        int n;
+        cin >> n;
+        char f[n];
+        vector<pair<int, int>> a(n);
+        rep(i, n)
+        {
+            cin >> a[i].first;
+            a[i].second = i;
+        }
+        sort(a.begin(), a.end(), sortinrev);
+        sort(s1.begin(), s1.end());
+        string s2 = s1;
 
+        // int count0 = 0;
+        char final[n];
+        rep(j, n)
+        {
+            int count1 = 0;
+            int count0 = 0;
+            // count0 = count(a.begin(), a.end(), 0); // counting zeros
+            repr(i, a.size() - 1, 0)
+            {
+                if (a[i].first == 0)
+                {
+                    count0++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            while (true)
+            {
+                count1 = count(s2.begin(), s2.end(), s2[s2.size() - 1]);
+                if (count1 == count0)
+                {
+                    break;
+                }
+                else
+                {
+                    s2.pop_back();
+                }
+            }
+            if (a.size() > 0)
+            {
+                while (count0--)
+                {
+                    final[a[a.size() - 1].second] = s2[s2.size() - 1];
+                    int temp = a[a.size() - 1].second;
+                    a.pop_back();
+                    s2.pop_back();
+
+                    rep(i, a.size())
+                    {
+                        a[i].first = a[i].first - abs(temp - a[i].second);
+                    }
+                }
+                sort(a.begin(), a.end(), sortinrev);
+            }
+        }
+        rep(i, n)
+        {
+            cout << final[i];
+        }
+        cout << el;
+    }
     return 0;
 }

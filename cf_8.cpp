@@ -1,11 +1,11 @@
 #include <iostream>
-#include <iomanip>
 #include <vector>
 #include <bits/stdc++.h>
 #include <math.h>
 #include <stack>
+#include <string>
 #define pb push_back
-// #define pop pop_back
+#define pop pop_back
 #define ll long long int
 #define vi vector<int>
 #define vl vector<long>
@@ -23,92 +23,63 @@
 #define rall(v) v.rbegin(), v.rend()
 #define fir first
 #define sec second
-#define mod (int)1e9 + 7
-#define INF (ll)9e9 + 1
+#define d (int)1e9 + 7
+#define INF (int)2e9 + 1
 #define el "\n"
 #define fs fastscan
+#define tlower(A) transform(A.begin(), A.end(), A.begin(), ::tolower)
+#define tupper(A) transform(A.begin(), A.end(), A.begin(), ::toupper)
 #define vrep(vec) for (const auto &value : vec)
 #define arep(arrat) for (const auto &value : array)
 using namespace std;
 
-bool sortinrev(const pair<int, int> &a,
-               const pair<int, int> &b)
+void fastscan(int &number) //much faster way of input, only integers
 {
-    return (a.first > b.first);
-}
-void swap(int *a, int *b)
-{
-    int temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;
-}
-ll modu(ll n, ll d)
-{
-    ll qw = n % d;
-    if (qw < 0)
+    bool negative = false;
+    register int c;
+    number = 0;
+    c = getchar();
+    if (c == '-')
     {
-        return qw + d;
+        negative = true;
+        c = getchar();
     }
-    return qw;
-}
-bool isPrime(int n)
-{
-    // Corner cases
-    if (n <= 1)
-        return false;
-    if (n <= 3)
-        return true;
-
-    // This is checked so that we can skip
-    // middle five numbers in below loop
-    if (n % 2 == 0 || n % 3 == 0)
-        return false;
-
-    for (int i = 5; i * i <= n; i = i + 6)
-        if (n % i == 0 || n % (i + 2) == 0)
-            return false;
-
-    return true;
+    for (; (c > 47 && c < 58); c = getchar())
+        number = number * 10 + c - 48;
+    if (negative)
+        number *= -1;
 }
 
-ll powe(ll i1, ll n)
-{
-    ll prod = 1;
-    for (int i = 1; i <= n; i++)
-    {
-        prod = prod * i1;
-    }
-    return prod;
-}
-
-int solve()
-{
-    // unordered_map<char,int> m;
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-
-    vector<vector<int>> dp(n+1,vector<int>(n+1,0));
-
-    
-
-    return 0;
-}
 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //use auto instead of data types
-    int t;
-    cin >> t;
 
-    while (t--)
+    int test;
+    cin >> test;
+    while (test--)
     {
-        solve();
+        int n;
+        cin >> n;
+        int a[n];
+        rep(i, n)
+        {
+            cin >> a[i];
+        }
+        vi final;
+        final.pb(a[0]);
+        rep2(j,1,n-2){
+            if((a[j]>=a[j-1] && a[j]>=a[j+1] )|| (a[j]<=a[j-1] && a[j]<=a[j+1])){
+                final.pb(a[j]);
+            }
+        }
+        final.pb(a[n-1]);
+        cout<<final.size()<<el;
+        rep(j,final.size()){
+            cout<<final[j]<<" ";
+        }
+        cout<<el;
     }
-
     return 0;
 }

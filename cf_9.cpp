@@ -1,11 +1,12 @@
 #include <iostream>
-#include <iomanip>
 #include <vector>
 #include <bits/stdc++.h>
 #include <math.h>
 #include <stack>
+#include <bitset>
+#include <string>
 #define pb push_back
-// #define pop pop_back
+#define pop pop_back
 #define ll long long int
 #define vi vector<int>
 #define vl vector<long>
@@ -23,141 +24,59 @@
 #define rall(v) v.rbegin(), v.rend()
 #define fir first
 #define sec second
-#define mod (int)1e9 + 7
+#define d (int)1e9 + 7
 #define INF (int)2e9 + 1
 #define el "\n"
 #define fs fastscan
+#define tlower(A) transform(A.begin(), A.end(), A.begin(), ::tolower)
+#define tupper(A) transform(A.begin(), A.end(), A.begin(), ::toupper)
 #define vrep(vec) for (const auto &value : vec)
 #define arep(arrat) for (const auto &value : array)
+#define N 100000
 using namespace std;
 
-bool sortinrev(const pair<int, int> &a,
-               const pair<int, int> &b)
-{
-    return (a.first > b.first);
-}
-void swap(int *a, int *b)
-{
-    int temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;
-}
-ll modu(ll n, ll d)
-{
-    ll qw = n % d;
-    if (qw < 0)
-    {
-        return qw + d;
-    }
-    return qw;
-}
-bool isPrime(int n)
-{
-    // Corner cases
-    if (n <= 1)
-        return false;
-    if (n <= 3)
-        return true;
-
-    // This is checked so that we can skip
-    // middle five numbers in below loop
-    if (n % 2 == 0 || n % 3 == 0)
-        return false;
-
-    for (int i = 5; i * i <= n; i = i + 6)
-        if (n % i == 0 || n % (i + 2) == 0)
-            return false;
-
-    return true;
-}
-
-pair<int, int> func(int x, int y, int flag, vector<vector<bool>> &ch)
-{
-    if (flag)
-    {
-        int lx = x, ly = y;
-        for (int i = x; i >= 0; i--)
-        {
-            if (!ch[i][y])
-            {
-                cout << i + 1 << " " << y + 1 << endl;
-                ch[i][y] = true;
-                lx = i;
-                ly = y;
-            }
-        }
-        for (int i = x + 1; i < ch.size(); i++)
-        {
-            if (!ch[i][y])
-            {
-                cout << i + 1 << " " << y + 1 << endl;
-                ch[i][y] = true;
-                lx = i;
-                ly = y;
-            }
-        }
-        return {lx, ly};
-    }
-    else
-    {
-        int lx = x, ly = y;
-        for (int i = y; i >= 0; i--)
-        {
-            if (!ch[x][i])
-            {
-                cout << x + 1 << " " << i + 1 << endl;
-                ch[x][i] = true;
-                lx = x;
-                ly = i;
-            }
-        }
-        for (int i = y + 1; i < ch[0].size(); i++)
-        {
-            if (!ch[x][i])
-            {
-                cout << x + 1 << " " << i + 1 << endl;
-                ch[x][i] = true;
-                lx = x;
-                ly = i;
-            }
-        }
-        return {lx, ly};
-    }
-}
-
-int solve()
-{
-    int n,d,m;
-    cin>>n>>d>>m;
-    vector<int> A(n);
-    rep(i,n){
-        cin>>A[i];
-    }
-    sort(A.begin(),A.end());
-    long final = A[n-1];
-    int i = 0,j=n-1;
-    while(j>i){
-        long sm = 0;
-        for(int k = 0;k<=d;k++){
-            sm += A[k];
-        }
-    }
-    return 0;
-}
 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    //use auto instead of data types
-    // int t;
-    // cin >> t;
 
-    // while (t--)
+    int n;
+    cin>>(n);
+    int a[n];
+    bitset<N> c;
+    rep(i, n)
     {
-        solve();
+        cin>>(a[i]);
+        c[a[i]] = 1;
     }
-
+    deque<int> min1;
+    int flag = 0;
+    rep(i, n+1)
+    {
+        if (c[i] == 0)
+        {
+            min1.push_back(i);
+            flag = 1;
+        }
+    }
+        rep(i, n)
+            min1.pb(n + 1+i);
+    
+    int b[n];
+    rep(i, n)
+    {
+        b[i] = min1[0];
+        min1.pop_front();
+        c[b[i]] = 1;
+        c[a[i]] = 0;
+        if (i < n - 1)
+            c[a[i + 1]] = 1;
+        if(c[a[i]] == 0){
+            // min1.pop_front();
+            min1.push_front(a[i]);
+        }
+        cout << b[i] << " ";
+    }
     return 0;
 }
