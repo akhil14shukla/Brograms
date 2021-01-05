@@ -23,7 +23,7 @@
 #define rall(v) v.rbegin(), v.rend()
 #define fir first
 #define sec second
-#define mod (int)1e9 + 7
+#define mod (int)(1e9 + 7)
 #define INF (int)2e9 + 1
 #define el "\n"
 #define fs fastscan
@@ -34,30 +34,7 @@ using namespace std;
 bool sortinrev(const pair<int, int> &a,
                const pair<int, int> &b)
 {
-    if (a.first < b.first)
-    {
-        return 1;
-    }
-    else if (a.first == b.first)
-    {
-        if (a.second > b.second)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-    else
-    {
-        return 0;
-    }
-}
-bool sortinrev2(pair<ll, ll> a,
-                pair<ll, ll> b)
-{
-    return a.second > b.second;
+    return (a.first > b.first);
 }
 void swap(int *a, int *b)
 {
@@ -75,59 +52,131 @@ ll modu(ll n, ll d)
     }
     return qw;
 }
-int count = 0;
-void solve()
+bool isPrime(int n)
 {
-    ll n, x;
-    cin >> n >> x;
-    vector<pair<ll, int>> a(n);
-    rep(i, n)
-    {
-        cin >> a[i].first;
-        a[i].second = i + 1;
-    }
-    vector<pair<ll, pair<int, int>>> ult;
-    rep(i, n)
-    {
-        rep2(j, i + 1, n - 1)
-        {
-            ult.push_back({a[i].first + a[j].first, {a[i].second, a[j].second}});
-        }
-    }
-    sort(begin(ult), end(ult));
-    ;
+    // Corner cases
+    if (n <= 1)
+        return false;
+    if (n <= 3)
+        return true;
 
-    // ll sum1 = a[i];
-    int j = 0;
-    int k = ult.size() - 1;
-    while (j < k)
+    // This is checked so that we can skip
+    // middle five numbers in below loop
+    if (n % 2 == 0 || n % 3 == 0)
+        return false;
+
+    for (int i = 5; i * i <= n; i = i + 6)
+        if (n % i == 0 || n % (i + 2) == 0)
+            return false;
+
+    return true;
+}
+
+int solve()
+{
+    int n, m;
+    cin >> n >> m;
+    vector<vector<char>> a(n, vector<char>(m));
+    rep(i, n)
     {
-        if (ult[j].first + ult[k].first > x)
+        rep(j, m)
         {
-            k--;
-        }
-        else if (ult[j].first + ult[k].first < x)
-        {
-            j++;
-        }
-        else if (ult[j].first + ult[k].first == x && ult[j].second.second != ult[k].second.second && ult[j].second.second != ult[k].second.first && ult[j].second.first != ult[k].second.second && ult[j].second.first != ult[k].second.first)
-        {
-            cout << ult[j].second.first << " " << ult[j].second.second << " " << ult[k].second.first << " " << ult[k].second.second;
-            return;
-        }
-        else
-        {
-            j++;
+            cin >> a[i][j];
         }
     }
-    cout << "IMPOSSIBLE";
-    return;
+    if (min(n, m) > 3)
+    {
+        cout << -1 << endl;
+        return 0;
+    }
+    else if (min(n, m) == 1)
+    {
+        cout << 0 << endl;
+        return 0;
+    }
+    vector<int> b(max(m, n), 0);
+    rep(i, max(m, n))
+    {
+        for (int j = min(m, n) - 1; j >= 0; j--)
+        {
+            if (m > n)
+            {
+                b[i] += (a[j][i] - '0') * pow(2, n - 1 - j);
+            }
+            else
+            {
+                b[i] += (a[i][j] - '0') * pow(2, n - 1 - j);
+            }
+        }
+    }
+    unordered_map<int, unordered_set<int>> m1;
+    m1[0].insert({0, 5, 2});
+    m1[1].insert({1, 4, 3});
+    m1[2].insert({2, 0, 7});
+    m1[3].insert({3, 1, 6});
+    m1[4].insert({4, 6, 1});
+    m1[5].insert({5, 0, 7});
+    m1[6].insert({6, 3, 4});
+    m1[7].insert({7, 2, 5});
+
+    vector<vector<int>> dp(max(m, n), vector<int>(8, INT_MAX));
+
+    vector<vector<int>> dp1(max(m, n), vector<int>(4, INT_MAX));
+    int last = b[0];
+    // dp[0][b[0]] = 0;
+    // dp[0][m[b[0]]];
+    for (auto i = m1[b[0]].begin(); i != m1[b[0]].end() && min(m, n) == 3; i++)
+    {
+        dp[0][*i] = __builtin_popcount((*i) ^ b[0]);
+    }
+
+    for (auto i = m1[b[0]].begin(); i != m1[b[0]].end() && min(m, n) == 2; i++)
+    {
+        if (*i < 4)
+        {
+            dp1[0][*i] = __builtin_popcount((*i) ^ b[0]);
+        }
+    }
+
+    for (int i = 1; i < max(m, n); i++)
+    {
+        // int min1 = INT_MAX;
+        // ll store = b[i];
+        // dp[i][
+        for (auto j = m1[last].begin(); j != m1[last].end(); j++)
+        {
+            for (auto k = m1[b[i]].begin(); k != m1[b[i]].end(); k++)
+            {
+                if (min(m, n) == 2 && *j < 4 && *k < 4 && m1[*k].find(*j) != m1[*k].end())
+                {
+                    dp1[i][*j] = min(dp1[i][*j], dp1[i - 1][*k] + __builtin_popcount((*k) ^ b[i]));
+                }
+                else if (min(m, n) == 3 && m1[*k].find(*j) != m1[*k].end())
+                {
+                    dp[i][*k] = min(dp[i][*k], dp[i - 1][*j] + __builtin_popcount((*k) ^ b[i]));
+                }
+            }
+        }
+        last = b[i];
+    }
+    cout << *min_element(dp[max(m, n) - 1].begin(), dp[max(m, n) - 1].end()) << endl;
+    // if (min(m, n) ==)
+    // cout << final << endl;
+    return 0;
 }
 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    solve();
+    //use auto instead of data types
+    // int t;
+    // cin >> t;
+
+    // while (t--)
+    {
+        solve();
+    }
+
     return 0;
 }

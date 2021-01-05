@@ -30,7 +30,10 @@
 #define vrep(vec) for (const auto &value : vec)
 #define arep(arrat) for (const auto &value : array)
 using namespace std;
-
+ #include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
+#include <ext/pb_ds/detail/standard_policies.hpp>
+using namespace __gnu_pbds;
 bool sortinrev(const pair<int, int> &a,
                const pair<int, int> &b)
 {
@@ -40,7 +43,7 @@ bool sortinrev(const pair<int, int> &a,
     }
     else if (a.first == b.first)
     {
-        if (a.second > b.second)
+        if (a.second < b.second)
         {
             return 1;
         }
@@ -75,50 +78,77 @@ ll modu(ll n, ll d)
     }
     return qw;
 }
-
-int wholesome(vector<int> &a)
-{
-    ll sum = 0;
-    rep(i, a.size())
-    {
+bool count(vector<ll> &a, ll &mid, ll &x){
+    ll sum = 0, groups = 0;
+    for(int i = 0;i<int(a.size());i++){
+        if(a[i] > mid){
+            return false;
+        }
+        if(sum + a[i] > mid){
+            groups++;
+            sum = 0;
+        }
         sum += a[i];
     }
-    return sum;
+    if(sum>0){
+        groups++;
+    }
+    return groups<=x;
 }
+struct ordered_multiset { // multiset supporting duplicating values in set
+        ll len = 0;
+        const ll ADD = 1000010;
+        const ll MAXVAL = 1000000010;
+        unordered_map<ll, ll> mp; // hash = 96814
+        tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update> T;
+    
+        ordered_multiset() { len = 0; T.clear(), mp.clear(); }
+    
+        inline void insert(ll x){
+            len++, x += MAXVAL;
+            ll c = mp[x]++;
+            T.insert((x * ADD) + c); }
+    
+        inline void erase(ll x){
+            x += MAXVAL;
+            ll c = mp[x];
+            if(c) {
+                c--, mp[x]--, len--;
+                T.erase((x*ADD) + c); } }
+    
+        inline ll kth(ll k){        // 1-based index,  returns the
+            if(k<1 || k>len) return -1;     // K'th element in the treap,
+            auto it = T.find_by_order(--k); // -1 if none exists
+            return ((*it)/ADD) - MAXVAL; } 
+    
+        inline ll lower_bound(ll x){      // Count of value <x in treap
+            x += MAXVAL;
+            ll c = mp[x];
+            return (T.order_of_key((x*ADD)+c)); }
+    
+        inline ll upper_bound(ll x){      // Count of value <=x in treap
+            x += MAXVAL;
+            ll c = mp[x];
+            return (T.order_of_key((x*ADD)+c)); }
+    
+        inline int size() { return len; }   // Number of elements in treap
+    };
 void solve()
 {
-    ll n, x;
-    cin >> n >> x;
+    ll n,x;
+    cin>>n>>x;
     vector<int> h(n);
-    rep(i, n)
-    {
-        cin >> h[i];
+    rep(i,n){
+        cin>>h[i];
     }
     vector<int> s(n);
-    rep(i, n)
-    {
-        cin >> s[i];
+    rep(i,n){
+        cin>>s[i];
     }
-    vector<vector<int>> dp(n + 1, vector<int>(x + 1, 0));
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 1; j <= x; j++)
-        {
-            if (j - h[i - 1] >= 0)
-            {
-                dp[i][j] = max(dp[i][j], max(dp[i - 1][j - h[i - 1]] + s[i - 1], max(dp[i - 1][j], dp[i][j - 1])));
-            }
-            else
-            {
-                dp[i][j] = max(dp[i][j], max(dp[i - 1][j], dp[i][j - 1]));
-            }
-        }
-    }
-    cout << dp[n][x];
-
-    return;
+    
+    return ;
 }
-
+ 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
