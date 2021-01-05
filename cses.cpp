@@ -136,6 +136,7 @@ struct ordered_multiset { // multiset supporting duplicating values in set
 void solve()
 {
     ll n,x;
+    cout<<1<<endl;
     cin>>n>>x;
     vector<int> h(n);
     rep(i,n){
@@ -145,7 +146,7 @@ void solve()
     rep(i,n){
         cin>>s[i];
     }
-    
+    cout<<2;
     return ;
 }
  
