@@ -1,4 +1,3 @@
-    // if (v1[i][j])
-    // {
-    //     return v[i][j];
-    // }
+ // if(m[pre[i] == 0]){
+        //     m.erase(pre[i]);
+        // }

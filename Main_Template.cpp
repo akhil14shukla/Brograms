@@ -1,10 +1,11 @@
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <bits/stdc++.h>
 #include <math.h>
 #include <stack>
 #define pb push_back
-#define pop pop_back
+// #define pop pop_back
 #define ll long long int
 #define vi vector<int>
 #define vl vector<long>
@@ -22,11 +23,10 @@
 #define rall(v) v.rbegin(), v.rend()
 #define fir first
 #define sec second
-#define d (int)1e9 + 7
+#define mod (int)1e9 + 7
 #define INF (int)2e9 + 1
 #define el "\n"
 #define fs fastscan
-
 #define vrep(vec) for (const auto &value : vec)
 #define arep(arrat) for (const auto &value : array)
 using namespace std;
@@ -43,48 +43,52 @@ void swap(int *a, int *b)
     *a = *b;
     *b = temp;
 }
-
-//extra
-void fastscan(int &number) //much faster way of input, only integers
+ll modu(ll n, ll d)
 {
-    //variable to indicate sign of input number     //getchar_unlocked() fastest way of input  and lly, putchar_unlocked(c)
-    bool negative = false;
-    register int c;
-
-    number = 0;
-
-    // extract current character from buffer
-    c = getchar();
-    if (c == '-')
+    ll qw = n % d;
+    if (qw < 0)
     {
-        // number is negative
-        negative = true;
-
-        // extract the next character from the buffer
-        c = getchar();
+        return qw + d;
     }
-
-    // Keep on extracting characters if they are integers
-    // i.e ASCII Value lies from '0'(48) to '9' (57)
-    for (; (c > 47 && c < 58); c = getchar())
-        number = number * 10 + c - 48;
-
-    // if scanned input has a negative sign, negate the
-    // value of the input number
-    if (negative)
-        number *= -1;
+    return qw;
 }
-//over
+bool isPrime(int n)
+{
+    // Corner cases
+    if (n <= 1)
+        return false;
+    if (n <= 3)
+        return true;
+
+    // This is checked so that we can skip
+    // middle five numbers in below loop
+    if (n % 2 == 0 || n % 3 == 0)
+        return false;
+
+    for (int i = 5; i * i <= n; i = i + 6)
+        if (n % i == 0 || n % (i + 2) == 0)
+            return false;
+
+    return true;
+}
+
+int solve()
+{
+}
 
 int main()
 {
     std::ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     //use auto instead of data types
-    int a = 0;
-    int b = 23;
-    double f = double(a + b) / 2;
-    cout << f;
+    int t;
+    cin >> t;
+
+    while (t--)
+    {
+        solve();
+    }
 
     return 0;
 }
+a
