@@ -6,7 +6,9 @@
 	],
 	"settings": {
 		"files.associations": {
+			"ostream": "cpp",
 			"iostream": "cpp"
 		}
-	}
+	},
+		"code-runner.runInTerminal": true
 }

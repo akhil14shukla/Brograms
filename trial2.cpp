@@ -1,18 +1,13 @@
-#include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
 int main(){
-    int A = 8;
-     int count = 0;
-    for(int i = 0;i<32;i++){
-        if((A&1) == 0){
-            count++;
-            A >>=1;
-        }
-        else{
-            break;
-        }
-    }
-    cout<<count;
-    QWERTY
+double T = 950.00;
+double del = 100;
+while(del>0.01){
+    double temp = T;
+    T = double(28624913.13)*exp(double(-14933.73)/T);
+    del = abs(T - temp);
+}
+cout<<T<<endl;
     return 0;
 }
