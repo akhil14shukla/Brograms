@@ -137,15 +137,7 @@ void solve()
 {
     ll n,x;
     cin>>n>>x;
-    vector<int> h(n);
-    rep(i,n){
-        cin>>h[i];
-    }
-    vector<int> s(n);
-    rep(i,n){
-        cin>>s[i];
-    }
-    
+    cout<<n+x<<endl;
     return ;
 }
  
