@@ -166,38 +166,29 @@ void solve()
     {
         cin >> a[i];
     }
+    multiset<pair<ll, ll>> ms;
     rep(i, m)
     {
         int x, t;
         cin >> x >> t;
-        b[i].first = x - t;
-        b[i].second = x + t;
+        ms.insert({x + t, x - t});
     }
-    sort(begin(a),end(a));
-    sort(begin(b),end(b));
-    ll count = 0,j = 0;;
-    rep(i,n){
-        if(j>=m){
-            break;
+    sort(begin(a), end(a));
+    // sort(begin(b),end(b));
+    ll count = 0, j = 0;
+    ;
+    rep(i, n)
+    {
+        auto it = ms.lower_bound({a[i],-1e9});
+        while(it!=ms.end()&& it->second>a[i] &&it->first >= a[i]){
+            it = next(it);
         }
-        if( j < m && a[i]<b[j].first){
-            continue;
-        }
-        else if(j < m && a[i]>b[j].second){
-            while( j< m && a[i]>b[j].second){
-                j++;
-            }
-            if(j!=m){
-                count++;
-                j++;
-            }
-        }
-        else{
+        if(it!=ms.end()&& it->second<=a[i] && it->first >= a[i]){
             count++;
-            j++;
+            ms.erase(it);
         }
     }
-    cout<<count;
+    cout << count;
     return;
 }
 

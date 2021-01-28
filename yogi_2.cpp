@@ -1,60 +1,52 @@
 #include <iostream>
-#include <bits/stdc++.h>
-#include <algorithm>
-#include <vector>
+#define ll long long int
 using namespace std;
-int min(int a, int b){
-    if(a>b)return b;
-    return a;
+
+void MatrixMultiply(ll m[][2],ll n[][2]){
+    ll res[2][2];
+    for(ll i=0;i<2;i++){
+        for(ll j=0;j<2;j++){
+            res[i][j]=0;
+            for(ll k=0;k<2;k++){
+                res[i][j]+=(m[i][k]*n[k][j])%1000000007;
+                res[i][j]= res[i][j]%1000000007;
+            }
+        }
+    }
+    for(int i=0;i<2;i++)
+    {
+        for(int j=0;j<2;j++)m[i][j]=res[i][j];
+    }
 }
-int max(int a, int b){
-    if(a>b)return a;
-    return b;
+void MatrixPower(ll m[][2],ll k){
+    ll temp[2][2];
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++)temp[i][j]=m[i][j];
+    }
+    if(k<=1)return;
+    //if(k==2){MatrixMultiply(m,m);return;}
+    MatrixPower(temp,k/2);
+    MatrixMultiply(temp,temp);
+    if(k%2!=0){MatrixMultiply(m,temp);return;}
+     for(int i=0;i<2;i++)
+    {
+        for(int j=0;j<2;j++)m[i][j]=temp[i][j];
+    }
+    return;
 }
 int main()
 {
-    int T;
-    cin>>T;
-    for(int t=1;t<=T;t++)
-    {
-        int n,k,p;
-        cin>>n>>k>>p;
-        int a[n][k];
-        int sum[n][k],dp[n+1][p+1];
-        for(int i=0;i<n;i++)
-        {
-            for(int j=0;j<k;j++)
-            {
-                cin>>a[i][j];
-                if(j==0)sum[i][j]=a[i][j];
-                else sum[i][j] = sum[i][j-1]+a[i][j];
-                //cout<<sum[i][j]<<" ";
-            }
-            //cout<<endl;
-        }
-        for(int i=0;i=<n;i++)
-        {
-            for(int j=0;j<=p;j++)
-            {
-                dp[i][j]=0;
-            }
-        }
-        for(int i=1;i<=n;i++)
-        {
-            for(int j=0;j<=p;j++)
-            {
-                if(i==1){
-                    if(j<k)dp[i][j] = sum[i-1][j];
-                    else dp[i][j] = 0;
-                    continue;
-                }
-                dp[i][j]=max(a[i][j], dp[i-1][j]);
-                for(int x=1; x<=min(j,k);x++)
-                {
-                    dp[i][j] = max(dp[i][j],sum[i-1][x-1]+dp[i-1][j-x]);
-                }
-            }
-        }
-        cout<<"Case #"<<t<<": "<<dp[n-1][p-1]<<endl;
+    ll n;
+    cin>>n;
+    ll m[2][2]={{3,1},{1,3}};
+    ll u=1,d=0;
+    if(n==0){
+        cout<<u<<", "<<d;
+    return 0;
     }
+    MatrixPower(m,n);
+    u = m[0][0];
+    d = m[1][0];
+    cout<<u<<", "<<d;
+    return 0;
 }
