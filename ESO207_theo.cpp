@@ -135,8 +135,8 @@ struct ordered_multiset { // multiset supporting duplicating values in set
     };
 int solve()
 {
-   vector<int> A = {-5,-2,-1,0,5,10,120,150};
-   vector<int> B = {-10,5,10,15,17,40,47,90};
+   vector<int> A = {-5,-2,-1,0,5,10,120,150,180};
+   vector<int> B = {-20,-10,5,10,15,17,40,47,90};
    int low1 = 0,low2 = 0;
    int high1 =7, high2 = 7;
    while (high1 > low1 && high2 > low2){
@@ -144,11 +144,11 @@ int solve()
        int mid2 = low2 + (high2 - low2)/2;
        if (A[mid1]<B[mid2]){
            low1 = mid1;
-           high2 = mid2;
+           high2 = mid2+1;
        }
        else if(A[mid1]>B[mid2]){
-           high1 = mid1;
-           low2 = mid2;5
+           high1 = mid1+1;
+           low2 = mid2;
        }
        else{
            return A[mid1];
