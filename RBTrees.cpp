@@ -33,11 +33,14 @@ public:
     int black_height(Node<T> *p);
     void check(Node<T> *p);
 };
-template<typename T>
-int Tree<T>::black_height(Node<T>* p){
+template <typename T>
+int Tree<T>::black_height(Node<T> *p)
+{
     int x = 0;
-    while(p!=NULL){
-        if(p->color == 0){
+    while (p != NULL)
+    {
+        if (p->color == 0)
+        {
             x++;
         }
         p = p->left;
@@ -45,17 +48,22 @@ int Tree<T>::black_height(Node<T>* p){
     return x;
 }
 
-template<typename T>
-Node<T>* Tree<T>::Search(T x){
-    Node<T>* p = root;
-    while(p!=NULL){
-        if(p->data == x){
+template <typename T>
+Node<T> *Tree<T>::Search(T x)
+{
+    Node<T> *p = root;
+    while (p != NULL)
+    {
+        if (p->data == x)
+        {
             return p;
         }
-        if(p->data <x){
+        if (p->data < x)
+        {
             p = p->left;
         }
-        else{
+        else
+        {
             p = p->right;
         }
     }
@@ -72,7 +80,7 @@ void Tree<T>::create()
 template <typename T>
 Node<T> *Tree<T>::Insert(T x)
 {
-    Node<T>* p = root;
+    Node<T> *p = root;
     while (1)
     {
         if (x < p->data)
@@ -126,63 +134,66 @@ void Tree<T>::check(Node<T> *p)
         root->color = 0;
         return;
     }
-    if (p->parent->color == 0)
+    if (p->color == 1 && p->parent->color == 1)
     {
-        return ;
-    }
-    else
-    {
-        if (p->parent->parent != NULL)
+        if (p->parent->color == 0)
         {
-            if (p->parent->parent->left == p->parent)
-            { // p's parent is left child of p's grandparent
-                if (p->parent->parent->right != NULL && p->parent->parent->right->color == 1)
-                { // if p's uncle is red
-                    p->parent->color = 0;
-                    p->parent->parent->right->color = 0;
-                    p->parent->parent->color = 1;
-                    check(p->parent->parent);
-                }
-                else
-                { // if p's uncle is black or NULL that is black
-                    if (p->parent->left == p)
-                    {
-                        p = RRotation(p->parent->parent);
-                        p->color = 0;
-                        p->left->color = p->right->color = 0;
+            return;
+        }
+        else
+        {
+            if (p->parent->parent != NULL)
+            {
+                if (p->parent->parent->left == p->parent)
+                { // p's parent is left child of p's grandparent
+                    if (p->parent->parent->right != NULL && p->parent->parent->right->color == 1)
+                    { // if p's uncle is red
+                        p->parent->color = 0;
+                        p->parent->parent->right->color = 0;
+                        p->parent->parent->color = 1;
+                        check(p->parent->parent);
                     }
                     else
-                    {
-                        p = LRotation(p->parent)->left;
-                        p = RRotation(p->parent->parent);
-                        p->color = 0;
-                        p->left->color = p->right->color = 0;
+                    { // if p's uncle is black or NULL that is black
+                        if (p->parent->left == p)
+                        {
+                            p = RRotation(p->parent->parent);
+                            p->color = 0;
+                            p->left->color = p->right->color = 1;
+                        }
+                        else
+                        {
+                            p = LRotation(p->parent)->left;
+                            p = RRotation(p->parent->parent);
+                            p->color = 0;
+                            p->left->color = p->right->color = 1;
+                        }
                     }
-                }
-            }
-            else
-            { // if p's parent is right child of p's grandparent
-                if (p->parent->parent->left != NULL && p->parent->parent->left->color == 1)
-                { // if p's uncle is red
-                    p->parent->color = 0;
-                    p->parent->parent->left->color = 0;
-                    p->parent->parent->color = 1;
-                    check(p->parent->parent);
                 }
                 else
-                { // if p's uncle is black or NULL that is black
-                    if (p->parent->right == p)
-                    {
-                        p = LRotation(p->parent->parent);
-                        p->color = 0;
-                        p->left->color = p->right->color = 1;
+                { // if p's parent is right child of p's grandparent
+                    if (p->parent->parent->left != NULL && p->parent->parent->left->color == 1)
+                    { // if p's uncle is red
+                        p->parent->color = 0;
+                        p->parent->parent->left->color = 0;
+                        p->parent->parent->color = 1;
+                        check(p->parent->parent);
                     }
                     else
-                    {
-                        p = RRotation(p->parent)->right;
-                        p = LRotation(p->parent->parent);
-                        p->color = 0;
-                        p->left->color = p->right->color = 0;
+                    { // if p's uncle is black or NULL that is black
+                        if (p->parent->right == p)
+                        {
+                            p = LRotation(p->parent->parent);
+                            p->color = 0;
+                            p->left->color = p->right->color = 1;
+                        }
+                        else
+                        {
+                            p = RRotation(p->parent)->right;
+                            p = LRotation(p->parent->parent);
+                            p->color = 0;
+                            p->left->color = p->right->color = 1;
+                        }
                     }
                 }
             }
