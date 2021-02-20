@@ -34,7 +34,7 @@ public:
     void check(Node<T> *p);
 };
 template <typename T>
-int Tree<T>::black_height(Node<T> *p)
+int Tree<T>::black_height(Node<T> *p) // completed according to me
 {
     int x = 0;
     while (p != NULL)
@@ -49,7 +49,7 @@ int Tree<T>::black_height(Node<T> *p)
 }
 
 template <typename T>
-Node<T> *Tree<T>::Search(T x)
+Node<T> *Tree<T>::Search(T x) // completed according to me
 {
     Node<T> *p = root;
     while (p != NULL)
@@ -81,6 +81,14 @@ template <typename T>
 Node<T> *Tree<T>::Insert(T x) // completed according to me
 {
     Node<T> *p = root;
+    if(p == NULL && root == NULL){
+        Node<T>* t = new Node<T>;
+        t->data = x;
+        t->color = 0;
+        t->left = t->right = NULL;
+        root = t;
+        return root;
+    }
     while (1)
     {
         if (x < p->data)
