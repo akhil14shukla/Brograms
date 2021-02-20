@@ -78,7 +78,7 @@ void Tree<T>::create()
 }
 
 template <typename T>
-Node<T> *Tree<T>::Insert(T x)
+Node<T> *Tree<T>::Insert(T x) // completed according to me
 {
     Node<T> *p = root;
     while (1)
@@ -127,7 +127,7 @@ Node<T> *Tree<T>::Insert(T x)
     return NULL;
 }
 template <typename T>
-void Tree<T>::check(Node<T> *p)
+void Tree<T>::check(Node<T> *p) // completed according to me
 {
     if (p == root)
     {
@@ -201,7 +201,7 @@ void Tree<T>::check(Node<T> *p)
     }
 }
 template <typename T>
-Node<T> *Tree<T>::LRotation(Node<T> *p)
+Node<T> *Tree<T>::LRotation(Node<T> *p) // completed according to me
 {
     Node<T> *temp = p;
     if (p->parent != NULL)
@@ -232,7 +232,7 @@ Node<T> *Tree<T>::LRotation(Node<T> *p)
     return p = p->parent;
 }
 template <typename T>
-Node<T> *Tree<T>::RRotation(Node<T> *p)
+Node<T> *Tree<T>::RRotation(Node<T> *p) // completed according to me
 {
     Node<T> *temp = p;
     if (p->parent != NULL)
