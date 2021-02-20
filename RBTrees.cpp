@@ -27,7 +27,7 @@ public:
     }
     void create();
     int Search(T x);
-    Node<T> *Insert(T x, Node<T> *p);
+    Node<T> *Insert(T x);
     Node<T> *LRotation(Node<T> *p);
     Node<T> *RRotation(Node<T> *p);
     int black_height(Node<T> *p);
@@ -41,9 +41,9 @@ void Tree<T>::create()
 }
 
 template <typename T>
-Node<T> *Tree<T>::Insert(T x, Node<T> *p)
+Node<T> *Tree<T>::Insert(T x)
 {
-    p = root;
+    Node<T>* p = root;
     while (1)
     {
         if (x < p->data)
@@ -59,6 +59,9 @@ Node<T> *Tree<T>::Insert(T x, Node<T> *p)
                 t->right = NULL;
                 t->data = x;
                 p->left = t;
+                t->parent = p;
+                check(t);
+                return t;
                 // p - //balancing will be added later
                 break;
             }
@@ -76,43 +79,84 @@ Node<T> *Tree<T>::Insert(T x, Node<T> *p)
                 t->right = NULL;
                 t->data = x;
                 p->right = t;
+                t->parent = p;
+                check(t);
+                return t;
                 // balancing will be added later
                 break;
             }
         }
     }
+    return NULL;
 }
 template <typename T>
 void Tree<T>::check(Node<T> *p)
 {
-    if(p == root){
+    if (p == root)
+    {
         root->color = 0;
+        return;
+    }
+    if (p->parent->color == 0)
+    {
         return ;
     }
-    if(p->parent->color == 0){
-        continue;
-    }
-    else{
-        if(p->parent->parent->left == p->parent){ // p's parent is left child of p's grandparent
-            if(p->parent->parent->right->color == 1){ // if p's uncle is red
-                p->parent->color = 0;
-                p->parent->parent->right->color = 0;
-                p->parent->parent->color = 1;
-                check(p->parent->parent);
-            }
-            else{ // if p's uncle is black
-                if(p->parent->left == p){
-
+    else
+    {
+        if (p->parent->parent != NULL)
+        {
+            if (p->parent->parent->left == p->parent)
+            { // p's parent is left child of p's grandparent
+                if (p->parent->parent->right != NULL && p->parent->parent->right->color == 1)
+                { // if p's uncle is red
+                    p->parent->color = 0;
+                    p->parent->parent->right->color = 0;
+                    p->parent->parent->color = 1;
+                    check(p->parent->parent);
                 }
-                else{
-                    p = LRotation(p->parent)->left;
-                    RRotation(p->parent->parent);
+                else
+                { // if p's uncle is black or NULL that is black
+                    if (p->parent->left == p)
+                    {
+                        p = RRotation(p->parent->parent);
+                        p->color = 0;
+                        p->left->color = p->right->color = 0;
+                    }
+                    else
+                    {
+                        p = LRotation(p->parent)->left;
+                        p = RRotation(p->parent->parent);
+                        p->color = 0;
+                        p->left->color = p->right->color = 0;
+                    }
                 }
-
             }
-        }
-        else{ // if p's parent is right child of p's grandparent
-
+            else
+            { // if p's parent is right child of p's grandparent
+                if (p->parent->parent->left != NULL && p->parent->parent->left->color == 1)
+                { // if p's uncle is red
+                    p->parent->color = 0;
+                    p->parent->parent->left->color = 0;
+                    p->parent->parent->color = 1;
+                    check(p->parent->parent);
+                }
+                else
+                { // if p's uncle is black or NULL that is black
+                    if (p->parent->right == p)
+                    {
+                        p = LRotation(p->parent->parent);
+                        p->color = 0;
+                        p->left->color = p->right->color = 1;
+                    }
+                    else
+                    {
+                        p = RRotation(p->parent)->right;
+                        p = LRotation(p->parent->parent);
+                        p->color = 0;
+                        p->left->color = p->right->color = 0;
+                    }
+                }
+            }
         }
     }
 }
@@ -185,16 +229,22 @@ int main()
     T1.root = new Node<int>;
     T1.root->color = 0;
     T1.root->data = 12;
-    Node<int> *t1 = new Node<int>;
-    t1->data = 11;
-    t1->color = 0;
-    Node<int> *t2 = new Node<int>;
-    t2->data = 13;
-    t2->color = 0;
-    t1->parent = t2->parent = T1.root;
-    T1.root->left = t1;
-    T1.root->right = t2;
-    T1.LRotation(T1.root);
+    // Node<int> *t1 = new Node<int>;
+    // t1->data = 11;
+    // t1->color = 0;
+    // Node<int> *t2 = new Node<int>;
+    // t2->data = 13;
+    // t2->color = 0;
+    // t1->parent = t2->parent = T1.root;
+    // T1.root->left = t1;
+    // T1.root->right = t2;
+    // T1.LRotation(T1.root);
+    T1.Insert(11);
+    T1.Insert(13);
+    T1.Insert(14);
+    T1.Insert(15);
+    T1.Insert(16);
+    T1.Insert(17);
     cout << 12 << endl;
     return 0;
 }
