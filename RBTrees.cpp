@@ -26,13 +26,42 @@ public:
         root = NULL;
     }
     void create();
-    int Search(T x);
+    Node<T> *Search(T x);
     Node<T> *Insert(T x);
     Node<T> *LRotation(Node<T> *p);
     Node<T> *RRotation(Node<T> *p);
     int black_height(Node<T> *p);
     void check(Node<T> *p);
 };
+template<typename T>
+int Tree<T>::black_height(Node<T>* p){
+    int x = 0;
+    while(p!=NULL){
+        if(p->color == 0){
+            x++;
+        }
+        p = p->left;
+    }
+    return x;
+}
+
+template<typename T>
+Node<T>* Tree<T>::Search(T x){
+    Node<T>* p = root;
+    while(p!=NULL){
+        if(p->data == x){
+            return p;
+        }
+        if(p->data <x){
+            p = p->left;
+        }
+        else{
+            p = p->right;
+        }
+    }
+    return NULL;
+}
+
 template <typename T>
 void Tree<T>::create()
 {
