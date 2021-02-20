@@ -30,6 +30,8 @@ public:
     Node<T> *Insert(T x);
     Node<T> *LRotation(Node<T> *p);
     Node<T> *RRotation(Node<T> *p);
+    Node<T> *Delete(T x);
+    Node<T> *Exchange(Node<T> *p1, Node<T> *p2);
     int black_height(Node<T> *p);
     void check(Node<T> *p);
 };
@@ -81,8 +83,9 @@ template <typename T>
 Node<T> *Tree<T>::Insert(T x) // completed according to me
 {
     Node<T> *p = root;
-    if(p == NULL && root == NULL){
-        Node<T>* t = new Node<T>;
+    if (p == NULL && root == NULL)
+    {
+        Node<T> *t = new Node<T>;
         t->data = x;
         t->color = 0;
         t->left = t->right = NULL;
@@ -271,6 +274,62 @@ Node<T> *Tree<T>::RRotation(Node<T> *p) // completed according to me
     return p = p->parent;
 }
 
+// template<typename T>     // For exchanging the whole nodes
+// Node<T>* Tree<T>::Exchange(Node<T>* p1, Node<T>* p2){
+//     if(p1)
+// }
+template <typename T>
+Node<T> *Tree<T>::Delete(T x)
+{
+    Node<T> *p = Tree<T>::Search(T x);
+    if (p == NULL)
+    {
+        cout << "Node not found in the Tree"
+    }
+    else
+    {
+        if (p->left != NULL && p->right != NULL)
+        {
+            Node<T> *t = p->left;
+            while (t->right != NULL)
+            {
+                t = t->right;
+            }
+            p->data = t->data;          // exchanging the data, and not saving p's data, cause its gonna be deleted
+            Delete_call_1(Node<T> * t); // might create a function for other case
+        }
+        else if (p->left == NULL && p->right != NULL)
+        {
+            if (p->color == 1)
+            {
+                p->right->parent = p->parent;
+                if (p->parent == NULL)
+                {
+                    p->right->parent == NULL;
+                    root = p->right;
+                }
+                else
+                {
+                    if (p->parent->left == p)
+                    {
+                        p->parent->left = p->right;
+                    }
+                    else
+                    {
+                        p->parent->right = p->right;
+                    }
+                }
+                free(p);
+            }
+            else
+            {
+            }
+        }
+        else if (p->left != NULL && p->right == NULL)
+        {
+        }
+    }
+}
 int main()
 {
     Tree<int> T1;
