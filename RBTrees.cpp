@@ -283,6 +283,8 @@ template <typename T>
 Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
 {
     if (p!=NULL && p->color == 1)
+
+    
     {
         free(p);   
     }
