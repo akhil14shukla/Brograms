@@ -30,6 +30,7 @@ public:
     Node<T> *Insert(T x);
     Node<T> *LRotation(Node<T> *p);
     Node<T> *RRotation(Node<T> *p);
+    Node<T> *Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother);
     Node<T> *Delete(T x);
     Node<T> *Exchange(Node<T> *p1, Node<T> *p2);
     int black_height(Node<T> *p);
@@ -279,6 +280,58 @@ Node<T> *Tree<T>::RRotation(Node<T> *p) // completed according to me
 //     if(p1)
 // }
 template <typename T>
+Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
+{
+    if (p!=NULL && p->color == 1)
+    {
+        free(p);
+    }
+    else // if p is black
+    {
+        if (child->color == 1) // if p's child is red
+        {
+            child->color = 0;
+            free(p);
+        }
+        else // if p's child is black AND brother can't be NULL in this case
+        {
+            if (brother != NULL && brother->color == 1) //brother can't be NULL in this case
+            {
+                if (brother->parent->left == brother)
+                {
+                    LRotation(brother->parent);
+                }
+                else
+                {
+                    RRotation(brother->parent);
+                }
+                brother->color = 0;
+                brother->left->color = 1;
+                free(p);
+            }
+            else                                                                                                                    // Difficult case
+            {                                                                                                                       // brother is also black
+                if ((brother->left == NULL || brother->left->color == 0) && (brother->right == NULL || brother->right->color == 0)) //brother can't be NULL in this case
+                {
+                    if (child->parent->color == 1)
+                    {
+                        brother->color = 1;
+                        child->parent->color = 0;
+                        free(p);
+                    }
+                    else
+                    {
+                        free(p);
+                        brother->color = 1;
+                        Delete_main(NULL, child->parent); // lets see what we can do aout this
+                    }
+                }
+                else
+            }
+        }
+    }
+}
+template <typename T>
 Node<T> *Tree<T>::Delete(T x)
 {
     Node<T> *p = Tree<T>::Search(T x);
@@ -300,32 +353,28 @@ Node<T> *Tree<T>::Delete(T x)
         }
         else if (p->left == NULL && p->right != NULL)
         {
-            if (p->color == 1)
+            Node<T> *child = p->right;
+            Node<T> *brother;
+            child->parent = p->parent;
+            if (p->parent == NULL) // to be considered again, check once again
             {
-                p->right->parent = p->parent;
-                if (p->parent == NULL)
-                {
-                    p->right->parent == NULL;
-                    root = p->right;
-                }
-                else
-                {
-                    if (p->parent->left == p)
-                    {
-                        p->parent->left = p->right;
-                    }
-                    else
-                    {
-                        p->parent->right = p->right;
-                    }
-                }
-                free(p);
+                root = child;
+                child->color = 0;
+                return child;
+            }
+            if (p->parent->left == p)
+            {
+                p->parent->left = child;
+                brother = p->parent->right;
             }
             else
             {
+                p->parent->right = child;
+                brother = p->parent->left;
             }
+            // starting th main part //
         }
-        else if (p->left != NULL && p->right == NULL)
+        else if (p->left != NULL && p->right == NULL) // just need to mirror the above case
         {
         }
     }
