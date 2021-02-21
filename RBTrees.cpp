@@ -282,18 +282,16 @@ Node<T> *Tree<T>::RRotation(Node<T> *p) // completed according to me
 template <typename T>
 Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
 {
-    if (p!=NULL && p->color == 1)
-
-    
+    if (p != NULL && p->color == 1)
     {
-        free(p);   
+        return NULL;
     }
     else // if p is black
     {
         if (child->color == 1) // if p's child is red
         {
             child->color = 0;
-            free(p);
+            free(p); // replacing free with return and inserting free(p) at the end of Delete() function
         }
         else // if p's child is black AND brother can't be NULL in this case
         {
@@ -362,7 +360,7 @@ Node<T> *Tree<T>::Delete(T x)
             {
                 root = child;
                 child->color = 0;
-                return child; 
+                return child;
             }
             if (p->parent->left == p)
             {
