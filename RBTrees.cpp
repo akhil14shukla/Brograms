@@ -323,10 +323,26 @@ Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
                     {
                         free(p);
                         brother->color = 1;
-                        Delete_main(NULL, child->parent); // lets see what we can do aout this
+                        if (child->parent->left == child)
+                        {
+                            Delete_main(NULL, child->parent, child->parent->right); // lets see what we can do aout this
+                        }
+                        else
+                        {
+                            Delete_main(NULL, child->parent, child->parent->left);
+                        }
                     }
                 }
-                else
+                else{
+                    if(child->parent->left == child){
+                        if(brother->right->color == 0){
+                            
+                        }
+                    }
+                    else{
+
+                    }
+                }
             }
         }
     }
