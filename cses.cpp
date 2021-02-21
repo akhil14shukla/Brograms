@@ -147,6 +147,7 @@ void solve()
         cin>>s[i];
     }
     cout<<2;
+    cout<<n+x<<endl;
     return ;
 }
  
