@@ -360,7 +360,7 @@ Node<T> *Tree<T>::Delete(T x)
             {
                 root = child;
                 child->color = 0;
-                return child;
+                return child; 
             }
             if (p->parent->left == p)
             {
