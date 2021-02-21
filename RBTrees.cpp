@@ -139,6 +139,7 @@ Node<T> *Tree<T>::Insert(T x) // completed according to me
     }
     return NULL;
 }
+
 template <typename T>
 void Tree<T>::check(Node<T> *p) // completed according to me
 {
@@ -213,6 +214,7 @@ void Tree<T>::check(Node<T> *p) // completed according to me
         }
     }
 }
+
 template <typename T>
 Node<T> *Tree<T>::LRotation(Node<T> *p) // completed according to me
 {
@@ -244,6 +246,7 @@ Node<T> *Tree<T>::LRotation(Node<T> *p) // completed according to me
     }
     return p = p->parent;
 }
+
 template <typename T>
 Node<T> *Tree<T>::RRotation(Node<T> *p) // completed according to me
 {
