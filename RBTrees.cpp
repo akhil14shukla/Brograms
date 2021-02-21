@@ -291,7 +291,7 @@ Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
         if (child->color == 1) // if p's child is red
         {
             child->color = 0;
-            free(p); // replacing free with return and inserting free(p) at the end of Delete() function
+            // free(p); // replacing free with return and inserting free(p) at the end of Delete() function
         }
         else // if p's child is black AND brother can't be NULL in this case
         {
@@ -307,7 +307,7 @@ Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
                 }
                 brother->color = 0;
                 brother->left->color = 1;
-                free(p);
+                // free(p);
             }
             else                                                                                                                    // Difficult case
             {                                                                                                                       // brother is also black
@@ -317,11 +317,11 @@ Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
                     {
                         brother->color = 1;
                         child->parent->color = 0;
-                        free(p);
+                        // free(p);
                     }
                     else
                     {
-                        free(p);
+                        // free(p);
                         brother->color = 1;
                         if (child->parent->left == child)
                         {
@@ -333,27 +333,56 @@ Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
                         }
                     }
                 }
-                else{
-                    if(child->parent->left == child){
-                        if(brother->right->color == 0){
-                            
+                else
+                {
+                    if (child->parent->left == child)
+                    {
+                        if (brother->right->color == 0)
+                        {
+                            Node<T> *t = RRotation(brother);
+                            t->color = 0;
+                            t->right->color = 1;
+                            brother = t;
+                            Delete_main(p, child, brother);
+                        }
+                        else
+                        { // difficult case i guess
+                            Node<T> *t1 = LRotation(child->parent);
+                            t1->color = t1->left->color;
+                            t1->left->color = 0;
                         }
                     }
-                    else{
+                    else
+                    {
 
+                        if (brother->left->color == 0)
+                        {
+                            Node<T> *t = LRotation(brother);
+                            t->color = 0;
+                            t->right->color = 1;
+                            brother = t;
+                            Delete_main(p, child, brother);
+                        }
+                        else
+                        { // difficult case i guess
+                            Node<T> *t1 = RRotation(child->parent);
+                            t1->color = t1->right->color;
+                            t1->right->color = 0;
+                        }
                     }
                 }
             }
         }
     }
+    return NULL;
 }
 template <typename T>
 Node<T> *Tree<T>::Delete(T x)
 {
-    Node<T> *p = Tree<T>::Search(T x);
+    Node<T> *p = Tree<T>::Search(x);
     if (p == NULL)
     {
-        cout << "Node not found in the Tree"
+        cout << "Node not found in the Tree";
     }
     else
     {
@@ -364,10 +393,10 @@ Node<T> *Tree<T>::Delete(T x)
             {
                 t = t->right;
             }
-            p->data = t->data;          // exchanging the data, and not saving p's data, cause its gonna be deleted
-            Delete_call_1(Node<T> * t); // might create a function for other case
+            p->data = t->data; // exchanging the data, and not saving p's data, cause its gonna be deleted
+            // Delete_call_1(Node<T> * t); // might create a function for other case
         }
-        else if (p->left == NULL && p->right != NULL)
+        else if ((p->left == NULL && p->right != NULL) || (p->left != NULL && p->right == NULL))
         {
             Node<T> *child = p->right;
             Node<T> *brother;
@@ -389,11 +418,22 @@ Node<T> *Tree<T>::Delete(T x)
                 brother = p->parent->left;
             }
             // starting th main part //
+            Delete_main(p, child, brother);
+            free(p);
         }
-        else if (p->left != NULL && p->right == NULL) // just need to mirror the above case
+        else //both are NULL just remove the nodes
         {
+            if(p->parent->left == p){
+                p->parent->left = NULL;
+                free(p);
+            }
+            else{
+                p->parent->right = NULL;
+                free(p);
+            }
         }
     }
+    return NULL;
 }
 int main()
 {
@@ -414,9 +454,11 @@ int main()
     T1.Insert(11);
     T1.Insert(13);
     T1.Insert(14);
-    T1.Insert(15);
-    T1.Insert(16);
-    T1.Insert(17);
-    cout << 12 << endl;
+    T1.Insert(12);
+    T1.Delete(12);
+    Node<int> *t = T1.root->right;
+    cout << t->data << endl;
+    T1.LRotation(t);
+    cout << t->data << endl;
     return 0;
 }
