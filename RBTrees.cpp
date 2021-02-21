@@ -31,6 +31,7 @@ public:
     Node<T> *LRotation(Node<T> *p);
     Node<T> *RRotation(Node<T> *p);
     Node<T> *Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother);
+    Node<T> *Delete_sub(Node<T> *p);
     Node<T> *Delete(T x);
     Node<T> *Exchange(Node<T> *p1, Node<T> *p2);
     int black_height(Node<T> *p);
@@ -376,6 +377,61 @@ Node<T> *Tree<T>::Delete_main(Node<T> *p, Node<T> *child, Node<T> *brother)
     }
     return NULL;
 }
+
+template <typename T>
+Node<T> *Tree<T>::Delete_sub(Node<T> *p)
+{
+    if (p->left != NULL && p->right != NULL)
+    {
+        Node<T> *t = p->left;
+        while (t->right != NULL)
+        {
+            t = t->right;
+        }
+        p->data = t->data; // exchanging the data, and not saving p's data, cause its gonna be deleted
+         Delete_sub(t); // might create a function for other case
+    }
+    else if ((p->left == NULL && p->right != NULL) || (p->left != NULL && p->right == NULL))
+    {
+        Node<T> *child = p->right;
+        Node<T> *brother;
+        child->parent = p->parent;
+        if (p->parent == NULL) // to be considered again, check once again
+        {
+            root = child;
+            child->color = 0;
+            return child;
+        }
+        if (p->parent->left == p)
+        {
+            p->parent->left = child;
+            brother = p->parent->right;
+        }
+        else
+        {
+            p->parent->right = child;
+            brother = p->parent->left;
+        }
+        // starting th main part //
+        Delete_main(p, child, brother);
+        free(p);
+    }
+    else //both are NULL just remove the nodes
+    {
+        if (p->parent->left == p)
+        {
+            p->parent->left = NULL;
+            free(p);
+        }
+        else
+        {
+            p->parent->right = NULL;
+            free(p);
+        }
+    }
+    return NULL;
+}
+
 template <typename T>
 Node<T> *Tree<T>::Delete(T x)
 {
@@ -386,55 +442,11 @@ Node<T> *Tree<T>::Delete(T x)
     }
     else
     {
-        if (p->left != NULL && p->right != NULL)
-        {
-            Node<T> *t = p->left;
-            while (t->right != NULL)
-            {
-                t = t->right;
-            }
-            p->data = t->data; // exchanging the data, and not saving p's data, cause its gonna be deleted
-            // Delete_call_1(Node<T> * t); // might create a function for other case
-        }
-        else if ((p->left == NULL && p->right != NULL) || (p->left != NULL && p->right == NULL))
-        {
-            Node<T> *child = p->right;
-            Node<T> *brother;
-            child->parent = p->parent;
-            if (p->parent == NULL) // to be considered again, check once again
-            {
-                root = child;
-                child->color = 0;
-                return child;
-            }
-            if (p->parent->left == p)
-            {
-                p->parent->left = child;
-                brother = p->parent->right;
-            }
-            else
-            {
-                p->parent->right = child;
-                brother = p->parent->left;
-            }
-            // starting th main part //
-            Delete_main(p, child, brother);
-            free(p);
-        }
-        else //both are NULL just remove the nodes
-        {
-            if(p->parent->left == p){
-                p->parent->left = NULL;
-                free(p);
-            }
-            else{
-                p->parent->right = NULL;
-                free(p);
-            }
-        }
+        Delete_sub(p);
     }
     return NULL;
 }
+
 int main()
 {
     Tree<int> T1;
